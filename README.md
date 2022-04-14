@@ -1,4 +1,4 @@
-This application is a learning process from ZTM ACADEMY
+## This application is a learning process from ZTM ACADEMY
 
 # Getting Started with Create React App
 
