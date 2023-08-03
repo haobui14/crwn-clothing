@@ -7,34 +7,16 @@ const Home = () => {
   let shareCartURL = '';
   let showMessage = false;
   let shareCartURLIteam = null;
-  const retrieveData = async () => {
-    try {
-      const response = await fetch(`https://api.publicapis.org/entries`, {
-        method: 'GET',
-      });
-      if (response.ok) {
-        let data = await response.json();
-        shareCartURL = data?.count;
-        const blob = new Blob([shareCartURL], { type: 'text/plain' });
-        shareCartURLIteam = new ClipboardItem({ 'text/plain': blob });
-      } else {
-        // Print user message Unable to copy the Link
-        console.error('error getting share a cart Url');
-      }
-    } catch (error) {
-      // Print user message Unable to copy the Link
-      console.error(error);
-    }
-    return;
-  };
-  const copy = () => {
-    retrieveData();
+
+  const copy = async () => {
+    shareCartURL = 'Hi Guys';
+    const blob = new Blob([shareCartURL], { type: 'text/plain' });
+    shareCartURLIteam = new ClipboardItem({ 'text/plain': blob });
     if (typeof ClipboardItem && navigator.clipboard.write) {
       navigator.clipboard.write([shareCartURLIteam]);
     } else {
-      navigator.clipboard.writeText(shareCartURL);
+      await navigator.clipboard.writeText(shareCartURL);
     }
-
     showMessage = true;
     setTimeout(() => {
       showMessage = false;
