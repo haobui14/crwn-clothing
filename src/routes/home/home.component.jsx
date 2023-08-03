@@ -6,7 +6,8 @@ const Home = () => {
   const { ClipboardItem } = window;
   let shareCartURL = '';
   let showMessage = false;
-  const copy = async () => {
+  let shareCartURLIteam = null;
+  const retrieveData = async () => {
     try {
       const response = await fetch(`https://api.publicapis.org/entries`, {
         method: 'GET',
@@ -14,18 +15,8 @@ const Home = () => {
       if (response.ok) {
         let data = await response.json();
         shareCartURL = data?.count;
-        //Using this for Safari browser on IOS
-        if (typeof ClipboardItem && navigator.clipboard.write) {
-          const blob = new Blob([shareCartURL], { type: 'text/plain' });
-          const shareCartURLIteam = new ClipboardItem({ 'text/plain': blob });
-          navigator.clipboard.write([shareCartURLIteam]);
-        } else {
-          await navigator.clipboard.writeText(shareCartURL);
-        }
-        showMessage = true;
-        setTimeout(() => {
-          showMessage = false;
-        }, 3000);
+        const blob = new Blob([shareCartURL], { type: 'text/plain' });
+        shareCartURLIteam = new ClipboardItem({ 'text/plain': blob });
       } else {
         // Print user message Unable to copy the Link
         console.error('error getting share a cart Url');
@@ -36,9 +27,22 @@ const Home = () => {
     }
     return;
   };
+  const copy = () => {
+    retrieveData();
+    if (typeof ClipboardItem && navigator.clipboard.write) {
+      navigator.clipboard.write([shareCartURLIteam]);
+    } else {
+      navigator.clipboard.writeText(shareCartURL);
+    }
+
+    showMessage = true;
+    setTimeout(() => {
+      showMessage = false;
+    }, 3000);
+  };
   return (
     <div>
-    <button onClick={copy}>Copy</button>
+      <button onClick={copy}>Copy</button>
       <Directory />
       <Outlet />
     </div>
